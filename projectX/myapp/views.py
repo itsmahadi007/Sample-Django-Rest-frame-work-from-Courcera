@@ -1,6 +1,6 @@
 from django.shortcuts import render
 # jsonResponse will return in Json format below
-from django.http import request, JsonResponse
+from django.http import request, JsonResponse, Http404
 from .models import Employee
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -15,7 +15,7 @@ from .serializer import EmployeeSerializer
 
 
 @csrf_exempt
-@api_view(['POST'])
+@api_view(['GET'])
 def EmployeeDetails(request):
     if request.method == "GET":
         obj = Employee.objects.all()  # Query to get the values
@@ -57,3 +57,26 @@ class ListEmployee(APIView):
             serializer_obj.save()
             return Response(serializer_obj.data)
         return Response(serializer_obj.errors)
+
+class UpdateEmployee(APIView):
+
+    def get_object(self, id):
+        try:
+            obj = Employee.objects.get(id=id)
+            return obj
+        except Employee.DoesNotExist:
+            raise Http404
+
+    def put(self, request, id):
+        data = request.data
+        obj = self.get_object(id)
+        serilazier_obj = EmployeeSerializer(obj, data = data)
+        if serilazier_obj.is_valid():
+            serilazier_obj.save()
+            return Response(serilazier_obj.data)
+        return Response(serilazier_obj.errors)
+
+    def delete(self, request,id):
+        obj = self.get_object(id)
+        obj.delete()
+        return Response({"response":"Employee is successfully deleted"})

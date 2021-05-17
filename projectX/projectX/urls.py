@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 # here EmployeeDetails is class and ListEmplyee is a function
-from myapp.views import ListEmployee, EmployeeDetails
+from myapp.views import ListEmployee, EmployeeDetails, UpdateEmployee
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('employeedetails/', EmployeeDetails),
-    path('listemployee/', ListEmployee.as_view())
+    path('listemployee/', ListEmployee.as_view()),
+    path('updatemployee/<id>', UpdateEmployee.as_view())
 ]

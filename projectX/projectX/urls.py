@@ -21,5 +21,5 @@ from myapp.views import ListEmployee, EmployeeDetails
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('employeedetails/', EmployeeDetails),
-    path('listemployee/', ListEmployee.as_view)
+    path('listemployee/', ListEmployee.as_view())
 ]
